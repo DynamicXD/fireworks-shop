@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom"
 
 const Home = () => {
   return (
@@ -12,12 +13,12 @@ const Home = () => {
           <p className="text-xl mb-8 animate-fade-in delay-100">
             Your one-stop destination for the brightest and most spectacular fireworks!
           </p>
-          <a
-            href="/fireworks"
+          <Link
+            to="/fireworks"
             className="bg-gray-800 dark:bg-gray-700 text-[#dcc7ad] dark:text-gray-200 px-8 py-3 rounded-full font-semibold hover:bg-gray-700 dark:hover:bg-gray-600 hover:scale-105 transition-all duration-300"
           >
             Explore Fireworks
-          </a>
+          </Link>
         </div>
       </section>
 
@@ -146,12 +147,12 @@ const Home = () => {
           <p className="text-xl mb-8">
             Shop now and make your celebrations unforgettable!
           </p>
-          <a
-            href="/fireworks"
+          <Link
+            to="/fireworks"
             className="bg-[#dcc7ad] dark:bg-gray-600 text-gray-800 dark:text-white px-8 py-3 rounded-full font-semibold hover:bg-[#c5b39c] dark:hover:bg-gray-500 hover:scale-105 transition-all duration-300"
           >
             Shop Fireworks
-          </a>
+          </Link>
         </div>
       </section>
     </div>
