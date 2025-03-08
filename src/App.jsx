@@ -10,7 +10,7 @@ import Cart from "./pages/Cart";
 import Events from "./pages/Events"; // Import the Events page
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import TestComponent from './pages/Test';
+import Success from './pages/Success';
 
 function App() {
   const [cartCount, setCartCount] = useState(0);
@@ -90,7 +90,7 @@ function App() {
             path="/events"
             element={<Events bookedEvents={bookedEvents} />}
           />
-          <Route path='/test' element={<TestComponent />} />
+          <Route path='/success' element={<Success />} />
         </Routes>
       </main>
       <ToastContainer />

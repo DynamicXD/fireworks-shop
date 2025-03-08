@@ -1,9 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Assuming you're using react-router-dom for navigation
 
 const Cart = ({ cartItems, updateQuantity, clearCart }) => {
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
   // Function to calculate the total price
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  };
+
+  // Function to handle the checkout confirmation
+  const handleCheckout = () => {
+    setShowConfirmation(true);
+  };
+
+  // Function to handle the payment confirmation
+  const handleConfirmPayment = () => {
+    setIsLoading(true);
+    setShowConfirmation(false);
+
+    // Simulate a payment processing delay
+    setTimeout(() => {
+      setIsLoading(false);
+      navigate("/success", {
+        state: {
+          purchasedItems: cartItems,
+          totalAmount: calculateTotal(),
+        },
+      });
+      clearCart()
+    }, 2000); // 2 seconds delay for simulation
   };
 
   return (
@@ -101,12 +129,74 @@ const Cart = ({ cartItems, updateQuantity, clearCart }) => {
                   </div>
                   {/* Proceed to Checkout Button */}
                   <button
+                    onClick={handleCheckout}
                     className="w-full bg-[#dcc7ad] dark:bg-gray-700 text-gray-800 dark:text-white px-4 py-2 rounded-md font-semibold hover:bg-[#c5b39c] dark:hover:bg-gray-600 transition duration-300 mt-4"
                   >
                     Proceed to Checkout
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Confirmation Popup */}
+        {showConfirmation && (
+          <div className="fixed inset-0 backdrop-blur-sm flex justify-center items-center">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-11/12 max-w-md">
+              <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
+                Confirm Payment
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
+                Are you sure you want to proceed with the payment?
+              </p>
+              <ul className="mb-4">
+                {cartItems.map((item) => (
+                  <li key={item.id} className="flex justify-between">
+                    <span className="text-gray-600 dark:text-gray-400">{item.name}</span>
+                    <span className="text-gray-800 dark:text-gray-300">
+                      ₹ {(item.price * item.quantity).toFixed(2)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              {/* Subtotal in Popup */}
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                <div className="flex justify-between">
+                  <span className="text-gray-600 dark:text-gray-400 font-semibold">
+                    Subtotal
+                  </span>
+                  <span className="text-gray-800 dark:text-gray-300 font-bold">
+                    ₹ {calculateTotal().toFixed(2)}
+                  </span>
+                </div>
+              </div>
+              <div className="flex justify-end gap-4 mt-6">
+                <button
+                  onClick={() => setShowConfirmation(false)}
+                  className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-4 py-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleConfirmPayment}
+                  className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-300"
+                >
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Loading Animation */}
+        {isLoading && (
+          <div className="fixed inset-0 backdrop-blur-sm flex justify-center items-center">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+              <div className="flex justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-gray-100"></div>
+              </div>
+              <p className="text-gray-800 dark:text-white mt-4">Processing payment...</p>
             </div>
           </div>
         )}
